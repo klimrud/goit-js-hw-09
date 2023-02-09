@@ -20,32 +20,52 @@ refs.btnSubmit.addEventListener('click', onSubmit);
     // console.log(refs.stepEl[0].value);
     // console.log(refs.amountEl[0].value);
     let delay = 0;
-     const del = refs.delayEl[0].value;
-     const step = refs.stepEl[0].value;
-     const amount = refs.amountEl[0].value;
+     const del =  Number(refs.delayEl[0].value); //Первая задержка
+     const step =  Number(refs.stepEl[0].value);  // Шаг задержки
+     const amount =  Number(refs.amountEl[0].value);  //Количество
 
     for (let position = 1; position <= amount; position ++) {
-    delay = del + step*(position - 1);
-    // console.log(position);
-    createPromise( position, delay)
-    .then(({ position, delay }) => {
-      Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
+    
+      delay = del + step*(position - 1);
+    //  console.log(position);
+    //  console.log(delay);
+    createPromise(position, delay)
+    .then(({position, delay}) => {
+      Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`,
+     {
+      timeout: 2000,
+     }
+      );
     })
-    .catch(({ position, delay }) => {
-      Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
-    });
-   };
-  }
+    .catch(({position, delay}) => {
+      Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`,
+      {
+        timeout: 2000,
+       }
+      );
+    })
+   ,delay
+    }
+   }
+   
+  //  delay = del + step*(position - 1);
+  
 
   function createPromise(position, delay) {
-    const shouldResolve = Math.random() > 0.3;
+    // const shouldResolve = Math.random() > 0.3;
     return new Promise((resolve, reject) => {
-// setTimeout(() => {
+      const shouldResolve = Math.random() > 0.3; 
+      // console.log(shouldResolve)
+ setTimeout(() => {
   if (shouldResolve) {
-    resolve({ position, delay});// Fulfill
-   } else {
-    reject({ position, delay}); // Reject
+    // console.log('+')
+    resolve({position, delay});// Fulfill
+   }else{
+    // console.log('-')
+    reject({position, delay}); // Reject
    };
-// }, delay);
+ }
+  , delay
+);
   });
   }
